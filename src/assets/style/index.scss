@@ -1,0 +1,11 @@
+/* stylelint-disable scss/at-rule-no-unknown */
+@import "./tailwind";
+@tailwind utilities;
+@tailwind base;
+@tailwind components;
+
+input,
+select,
+textarea {
+  outline: none;
+}
