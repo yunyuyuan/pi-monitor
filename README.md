@@ -1,14 +1,12 @@
-# 🚀vite-react-tailwind-starter
+<p align="center"><img alt="Nuxt" align="center" style="width: 200px;" src="./src/public/favicon.png"/></p><br/>
 
----
-## Features
-* Vite + React(tsx) + Tailwind
-* ESlint + stylelint + husky(lint-staged)
-* Dynamic loaded `<SvgIcon>` component
-
-## Get started
-1. use this template repository.
-2. `git clone` to your local machine.
-3. `yarn install`.
-4. `yarn dev`.
-5. 🖐️coding!
+<h1 align="center">📷 Pi Camera</h1>
+  
+## Credits
+#### backend
+* [picamera](https://picamera.readthedocs.io/)
+* [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)
+* [fastapi](https://fastapi.tiangolo.com/)
+#### frontend
+* [react](https://reactjs.org/)
+* [vite](https://vitejs.dev/)

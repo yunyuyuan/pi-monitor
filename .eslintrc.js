@@ -17,17 +17,18 @@ module.exports = {
   },
   plugins: ["@typescript-eslint", "simple-import-sort", "tailwindcss", "prettier"],
   rules: {
-    "no-unused-vars": [
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": [
       "error",
-      {
-        vars: "all",
-        args: "after-used",
-        ignoreRestSiblings: false,
-        argsIgnorePattern: "^_",
-        varsIgnorePattern: "^_",
-        caughtErrorsIgnorePattern: "^_",
-        destructuredArrayIgnorePattern: "^_",
-      },
+      // {
+      //   vars: "all",
+      //   args: "after-used",
+      //   ignoreRestSiblings: false,
+      //   argsIgnorePattern: "^_",
+      //   varsIgnorePattern: "^_",
+      //   caughtErrorsIgnorePattern: "^_",
+      //   destructuredArrayIgnorePattern: "^_",
+      // },
     ],
 
     "prettier/prettier": [

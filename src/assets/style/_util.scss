@@ -1,0 +1,17 @@
+@mixin mobile {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin square($size: 100%) {
+  width: $size;
+  height: $size;
+}
+
+@mixin textoverflow($line: 1) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  -webkit-line-clamp: $line;
+}

@@ -7,27 +7,32 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/web/",
+  publicDir: "src/public",
   plugins: [react(), tsconfigPaths()],
   resolve: {
     alias: {
-      "~": path.resolve(__dirname, "./src")
-    }
+      "~": path.resolve(__dirname, "./src"),
+    },
   },
   build: {
+    outDir: "./dist/web",
     rollupOptions: {
-      plugins: [{
-        name: "raw-svg-file-loader",
-        transform (_: string, filepath: string) {
-          if (filepath.includes("node_modules")) {
-            return null;
-          }
-          if (filepath.endsWith(".svg")) {
-            return {
-              code: dataToEsm(fs.readFileSync(filepath).toString())
-            };
-          }
-        }
-      }]
-    }
-  }
+      plugins: [
+        {
+          name: "raw-svg-file-loader",
+          transform(_: string, filepath: string) {
+            if (filepath.includes("node_modules")) {
+              return null;
+            }
+            if (filepath.endsWith(".svg")) {
+              return {
+                code: dataToEsm(fs.readFileSync(filepath).toString()),
+              };
+            }
+          },
+        },
+      ],
+    },
+  },
 });

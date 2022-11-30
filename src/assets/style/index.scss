@@ -8,4 +8,23 @@ input,
 select,
 textarea {
   outline: none;
+  color: black;
+  padding: 4px;
+  border-radius: 3px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+
+  &.flex {
+    display: flex;
+    align-items: center;
+  }
+
+  &.flexc {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
 }
