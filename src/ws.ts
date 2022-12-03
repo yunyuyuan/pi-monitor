@@ -41,6 +41,7 @@ export const addListener = <T>(type: string, cb: (_: T) => any) => {
   msgCb.push({ type, cb });
 };
 
-export const sendMsg = (data: { type: "move" | "config" | "acquire" | "release"; msg?: any }) => {
+type msgType = "move" | "config" | "acquire" | "release";
+export const sendMsg = (data: { type: msgType; msg?: any }) => {
   ws?.send(JSON.stringify(data));
 };

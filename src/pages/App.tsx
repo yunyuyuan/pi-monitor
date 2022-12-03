@@ -4,15 +4,16 @@ import { useEffect, useState } from "react";
 import { HashRouter } from "react-router-dom";
 import { useMount, useTimeoutFn } from "react-use";
 
-import Config from "~/components/config";
 import Controller from "~/components/controller";
+import Operations from "~/components/operations";
 import { colorModeAtom, configAtom, ConfigType, editAtom, editingAtom } from "~/store";
+import { getHttpPrefix } from "~/utils";
 import { addListener, initWs } from "~/ws";
 
 const Main = () => {
   const [pwd, setPwd] = useState(import.meta.env.VITE_PWD);
   const [visible, setVisible] = useState(true);
-  const [_, cancelVisible, resetVisible] = useTimeoutFn(() => setVisible(false), 5000);
+  const [visibleState, cancelVisible, resetVisible] = useTimeoutFn(() => setVisible(false), 5000);
   const [colorMode] = useAtom(colorModeAtom);
   const setConfig = useUpdateAtom(configAtom);
   const setEdit = useUpdateAtom(editAtom);
@@ -39,9 +40,21 @@ const Main = () => {
       setVisible(true);
       cancelVisible();
     });
+    document.addEventListener("mousemove", () => {
+      setVisible(true);
+      if (visibleState() !== null) {
+        resetVisible();
+      }
+    });
     document.addEventListener("touchstart", () => {
       setVisible(true);
       cancelVisible();
+    });
+    document.addEventListener("touchmove", () => {
+      setVisible(true);
+      if (visibleState() !== null) {
+        resetVisible();
+      }
     });
     document.addEventListener("mouseup", () => {
       resetVisible();
@@ -56,12 +69,12 @@ const Main = () => {
         className={
           "h-screen w-screen object-contain " + (colorMode === "dark" ? "bg-black" : "bg-white")
         }
-        src={"http://" + (import.meta.env.VITE_BACK_URL || window.location.host) + "/stream/" + pwd}
+        src={getHttpPrefix() + "/stream/" + pwd}
         alt="stream"
       />
       <div style={{ display: visible ? "block" : "none" }}>
         {editing ? <Controller /> : null}
-        <Config />
+        <Operations pwd={pwd} />
       </div>
     </div>
   );

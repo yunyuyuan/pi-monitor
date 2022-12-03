@@ -4,7 +4,8 @@ from os import path
 import io
 from threading import Condition
 from fastapi.responses import StreamingResponse, RedirectResponse, HTMLResponse
-from fastapi import FastAPI, WebSocket
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI, WebSocket, Response
 import uuid
 import picamera
 import uvicorn
@@ -20,6 +21,13 @@ app = FastAPI()
 camera: picamera.PiCamera
 current: Union[None, uuid.UUID] = None
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins="*",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("shutdown")
 async def startup_event():
@@ -55,6 +63,17 @@ def check_pwd(pwd):
 @app.get("/")
 def read_root():
     return RedirectResponse(url='/web')
+
+@app.get("/screenshot/{pwd}")
+def screenshot(pwd):
+    check = check_pwd(pwd)
+    if check:
+        return check
+    if camera:
+        buffer = io.BytesIO()
+        camera.capture(buffer, format="png")
+        return Response(content=buffer.getvalue(), media_type="image/png")
+    return Response(content="no camera", status_code=500)
 
 @app.get("/stream/{pwd}")
 async def stream(pwd, background_tasks: fastapi.background.BackgroundTasks):
@@ -121,12 +140,11 @@ async def ws_handler(pwd, websocket: WebSocket):
                             'type': 'editing',
                             'data': True
                         })
-                elif data['type'] == 'release':
-                    if current == uid:
-                        await release()
                 elif uid == current:
-                    msg = data['msg']
-                    if data['type'] == 'move':
+                    msg = data.get('msg', None)
+                    if data['type'] == 'release':
+                        await release()
+                    elif data['type'] == 'move':
                         steer.move(orient=msg['orient'], duty=msg['duty'])
                     elif data['type'] == 'config':
                         if msg['key'] == 'framerate':
