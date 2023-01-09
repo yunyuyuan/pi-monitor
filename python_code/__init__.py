@@ -60,10 +60,6 @@ def check_pwd(pwd):
         return HTMLResponse(content='403 forbiddent', status_code=403)
     return None
 
-@app.get("/")
-def read_root():
-    return RedirectResponse(url='/web')
-
 @app.get("/screenshot/{pwd}")
 def screenshot(pwd):
     check = check_pwd(pwd)
