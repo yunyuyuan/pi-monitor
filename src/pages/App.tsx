@@ -10,6 +10,8 @@ import { colorModeAtom, configAtom, ConfigType, editAtom, editingAtom } from "~/
 import { getHttpPrefix } from "~/utils";
 import { addListener, initWs } from "~/ws";
 
+const stamp = Date.now();
+
 const Main = () => {
   const [pwd, setPwd] = useState(import.meta.env.VITE_PWD);
   const [visible, setVisible] = useState(true);
@@ -65,13 +67,16 @@ const Main = () => {
   });
   return (
     <div>
-      <img
-        className={
-          "h-screen w-screen object-contain " + (colorMode === "dark" ? "bg-black" : "bg-white")
-        }
-        src={getHttpPrefix() + "/stream/" + pwd}
-        alt="stream"
-      />
+      {
+        pwd && 
+        <img
+          className={
+            "h-screen w-screen object-contain " + (colorMode === "dark" ? "bg-black" : "bg-white")
+          }
+          src={getHttpPrefix() + "/stream/" + pwd + '?s=' + stamp}
+          alt="stream"
+        />
+      }
       <div style={{ display: visible ? "block" : "none" }}>
         {editing ? <Controller /> : null}
         <Operations pwd={pwd} />
