@@ -60,22 +60,17 @@ def check_pwd(pwd):
         return HTMLResponse(content='403 forbiddent', status_code=403)
     return None
 
-@app.get("/screenshot/{pwd}")
-def screenshot(pwd):
-    check = check_pwd(pwd)
-    if check:
-        return check
+# @app.get("/screenshot/{pwd}")
+@app.get("/screenshot")
+def screenshot():
     if camera:
         buffer = io.BytesIO()
         camera.capture(buffer, format="png")
         return Response(content=buffer.getvalue(), media_type="image/png")
     return Response(content="no camera", status_code=500)
 
-@app.get("/stream/{pwd}")
-async def stream(pwd, background_tasks: fastapi.background.BackgroundTasks):
-    check = check_pwd(pwd)
-    if check:
-        return check
+@app.get("/stream")
+async def stream(background_tasks: fastapi.background.BackgroundTasks):
     def streamer():
         while True:
             with output.condition:
@@ -88,12 +83,9 @@ async def stream(pwd, background_tasks: fastapi.background.BackgroundTasks):
 
 ws_manager = ConnectionManager()
 
-@app.websocket('/ws/{pwd}')
-async def ws_handler(pwd, websocket: WebSocket):
+@app.websocket('/ws')
+async def ws_handler(websocket: WebSocket):
     global camera, output, current
-    check = check_pwd(pwd)
-    if check:
-        return check
 
     await ws_manager.connect(websocket)
     uid = uuid.uuid4()
@@ -165,4 +157,4 @@ def start():
     with picamera.PiCamera(resolution='640x480', framerate=30) as camera:
         output = StreamingOutput()
         camera.start_recording(output, format='mjpeg')
-        uvicorn.run(app, port=8099, host='0.0.0.0')
+        uvicorn.run(app, port=8099, host='127.0.0.1')

@@ -6,7 +6,7 @@ export const initWs = (pwd: string) => {
   ws = new WebSocket(
     `ws${window.location.protocol.startsWith("https") ? "s" : ""}://${
       import.meta.env.VITE_BACK_URL || window.location.host
-    }/ws/${pwd}`
+    }/ws`
   );
   ws.onmessage = msgHandler;
 };

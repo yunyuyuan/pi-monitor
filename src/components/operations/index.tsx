@@ -28,7 +28,7 @@ export default function Operations({ pwd }: { pwd: string }) {
   const screenshot = () => {
     if (screenshotting) return;
     toggleScreenshotting(true);
-    fetch(`${getHttpPrefix()}/screenshot/${pwd}`)
+    fetch(`${getHttpPrefix()}/screenshot`)
       .then(async (res) => {
         if (res.status === 200) {
           const blob = await res.blob();

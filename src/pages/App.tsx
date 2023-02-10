@@ -22,16 +22,16 @@ const Main = () => {
   const [editing, setEditing] = useAtom(editingAtom);
 
   useEffect(() => {
-    if (!pwd) return;
+    // if (!pwd) return;
     initWs(pwd);
   }, [pwd]);
 
   useMount(() => {
     if (import.meta.env.PROD) {
-      const p = window.prompt("输入密码");
-      if (p) {
-        setPwd(p);
-      }
+      // const p = window.prompt("输入密码");
+      // if (p) {
+      //   setPwd(p);
+      // }
     }
     addListener<ConfigType>("config", (cfg) => {
       setConfig(cfg);
@@ -67,16 +67,15 @@ const Main = () => {
   });
   return (
     <div>
-      {
-        pwd && 
+      {pwd && (
         <img
           className={
             "h-screen w-screen object-contain " + (colorMode === "dark" ? "bg-black" : "bg-white")
           }
-          src={getHttpPrefix() + "/stream/" + pwd + '?s=' + stamp}
+          src={getHttpPrefix() + "/stream?s=" + stamp}
           alt="stream"
         />
-      }
+      )}
       <div style={{ display: visible ? "block" : "none" }}>
         {editing ? <Controller /> : null}
         <Operations pwd={pwd} />
